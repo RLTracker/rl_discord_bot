@@ -20,35 +20,6 @@ bot.command [:help] do |event, key|
   end
 end
 
-def help
-  "!stats {platform} {user_id} {white}
-
-  Platform:
-    steam/pc/ps4/xbox
-
-  user_id:
-    Steam = Use your vanityurl or steamID64 | https://steamid.io.
-    PS4 = Use your ps4 username
-    XBOX = Use your xbox username
-    NOTICE:
-      If you got Spaces in your Name, replace all spaces with it with %20
-  white
-    For everybody using the white theme ( Just add it after your normal call)
-
-  Examples:
-    !stats steam yixn
-    !stats steam yixn white
-    !stats ps4 Mr%20Narwha1
-    !stats xbox rafro white
-  Other Commands:
-    !stat {platform} {user_id} {white}
-    !stat help == !help rltracker.pro
-    !stat dev
-    !stat github
-    !stat originators
-  "
-end
-
 bot.command [:rank, :ranks] do |event|
   "Please use !stats instead of rank. We are not some kind of second class Tool!"
 end
@@ -121,6 +92,35 @@ bot.command [:stats, :stat] do |event, platform, user_id, negated|
       end
     end
   end
+end
+
+def help
+  "!stats {platform} {user_id} {white}
+
+  Platform:
+    steam/pc/ps4/xbox
+
+  user_id:
+    Steam = Use your vanityurl or steamID64 | https://steamid.io.
+    PS4 = Use your ps4 username
+    XBOX = Use your xbox username
+    NOTICE:
+      If you got Spaces in your Name, replace all spaces with it with %20
+  white
+    For everybody using the white theme ( Just add it after your normal call)
+
+  Examples:
+    !stats steam yixn
+    !stats steam yixn white
+    !stats ps4 Mr%20Narwha1
+    !stats xbox rafro white
+  Other Commands:
+    !stat {platform} {user_id} {white}
+    !stat help == !help rltracker.pro
+    !stat dev
+    !stat github
+    !stat originators
+  "
 end
 
 bot.run
