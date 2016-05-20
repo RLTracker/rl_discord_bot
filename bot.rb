@@ -1,8 +1,11 @@
+#!/usr/bin/env ruby
 require 'discordrb'
 require 'open-uri'
-rltracker_api_key = "" # rltracker api key here
-token = "" # Token here
-app_id = 0 # App Id here
+
+rltracker_api_key = ENV["RLTRACKER_API_KEY"]
+token = ENV["DISCORD_TOKEN"]
+app_id = ENV["DISCORD_APP_ID"]
+
 bot = Discordrb::Commands::CommandBot.new token: token, application_id: app_id, prefix: '!'
 
 bot.mention do |event|
