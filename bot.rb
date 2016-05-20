@@ -6,6 +6,13 @@ rltracker_api_key = ENV["RLTRACKER_API_KEY"]
 token = ENV["DISCORD_TOKEN"]
 app_id = ENV["DISCORD_APP_ID"]
 
+platforms = {
+  "steam": 1,
+  "pc": 1,
+  "ps4": 2,
+  "xbox": 3,
+}
+
 bot = Discordrb::Commands::CommandBot.new token: token, application_id: app_id, prefix: "!"
 
 bot.mention do |event|
@@ -45,16 +52,7 @@ bot.command [:stats, :stat] do |event, platform, user_id, negated|
           return "Please include a UserID like:\n!stat steam yixn.\nFor more help please use !help rltracker.pro"
       end
     else
-      case platform
-        when "steam"
-          platform = 1
-        when "pc"
-          platform = 1
-        when "ps4"
-          platform = 2
-        when "xbox"
-          platform = 3
-      end
+      platform = platforms[platform]
       if user_id == "Harley" || user_id == "Steamierpilot72"
         return "ProspectScrub"
       else
