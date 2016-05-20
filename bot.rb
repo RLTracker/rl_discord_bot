@@ -25,8 +25,8 @@ bot.command [:rank, :ranks] do |event|
 end
 
 bot.command [:stats, :stat] do |event, platform, user_id, negated|
-  (platform = platform.downcase) if platform
-  unless platform == "steam" || platform == "originators" || platform == "pc" || platform == "sites" || platform == "ps4" ||  platform == "xbox" || platform == "help" || platform == "github"|| platform == "dev"
+  platform = platform && platform.downcase
+  unless ["steam", "originators", "pc", "sites", "ps4", "xbox", "help", "github", "dev"].include? platform
     return "Please dont forget to specify the platform (steam/pc/ps4/xbox).\nFor more help please use !help rltracker.pro"
   else
     if user_id == nil
