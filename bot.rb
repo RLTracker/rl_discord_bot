@@ -1,25 +1,25 @@
 #!/usr/bin/env ruby
-require 'discordrb'
-require 'open-uri'
+require "discordrb"
+require "open-uri"
 
 rltracker_api_key = ENV["RLTRACKER_API_KEY"]
 token = ENV["DISCORD_TOKEN"]
 app_id = ENV["DISCORD_APP_ID"]
 
-bot = Discordrb::Commands::CommandBot.new token: token, application_id: app_id, prefix: '!'
+bot = Discordrb::Commands::CommandBot.new token: token, application_id: app_id, prefix: "!"
 
 bot.mention do |event|
-  #bot.private_channel(176412791010230283).send_message("Stop Mentioning me")
-  event.user.pm('Stop mentioning me!')
+  event.user.pm("Stop mentioning me!")
 end
 
-bot.command [:help] do |event,key|
+bot.command [:help] do |event, key|
   if key && key.downcase == "rltracker.pro"
     help
   else
     "\"!help rltracker.pro\" is a comment tho"
   end
 end
+
 def help
   "!stats {platform} {user_id} {white}
 
@@ -48,12 +48,14 @@ def help
     !stat originators
   "
 end
-bot.command [:rank,:ranks] do |event|
+
+bot.command [:rank, :ranks] do |event|
   "Please use !stats instead of rank. We are not some kind of second class Tool!"
 end
-bot.command [:stats,:stat] do |event,platform,user_id,negated|
+
+bot.command [:stats, :stat] do |event, platform, user_id, negated|
   (platform = platform.downcase) if platform
-  unless platform == "steam" ||platform == "originators" || platform == "pc" || platform == "sites" || platform == "ps4" ||  platform == "xbox" || platform == "help" || platform == "github"|| platform == "dev"
+  unless platform == "steam" || platform == "originators" || platform == "pc" || platform == "sites" || platform == "ps4" ||  platform == "xbox" || platform == "help" || platform == "github"|| platform == "dev"
     "Please dont forget to use Platform(steam/pc/ps4/xbox).\nFor more help please use !help rltracker.pro"
   else
     if user_id == nil
@@ -90,10 +92,10 @@ bot.command [:stats,:stat] do |event,platform,user_id,negated|
         end
         url = URI.parse("http://rltracker.pro/api/profile/get?api_key=#{rltracker_api_key}&platform=#{platform}&id=#{user_id}")
         req = Net::HTTP::Get.new(url.to_s)
-        res = Net::HTTP.start(url.host, url.port) {|http|
+        res = Net::HTTP.start(url.host, url.port) do |http|
           http.request(req)
-        }
-        response = (JSON.parse res.body)
+        end
+        response = JSON.parse(res.body)
         if negated == "white"
           image = response["image_negated"]
         else
@@ -110,7 +112,7 @@ bot.command [:stats,:stat] do |event,platform,user_id,negated|
           end
         else
           file = open(image)
-          File.open("image.png", 'w') do |f|
+          File.open("image.png", "w") do |f|
             f.write file.read
           end
           event.channel.send_file File.new("image.png")
