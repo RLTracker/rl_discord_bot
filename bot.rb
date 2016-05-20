@@ -16,7 +16,7 @@ bot.command [:help] do |event, key|
   if key && key.downcase == "rltracker.pro"
     help
   else
-    "\"!help rltracker.pro\" is a comment tho"
+    "'!help rltracker.pro' is a command though"
   end
 end
 
