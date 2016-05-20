@@ -21,28 +21,28 @@ bot.command [:help] do |event, key|
 end
 
 bot.command [:rank, :ranks] do |event|
-  "Please use !stats instead of rank. We are not some kind of second class Tool!"
+  "Please use !stats instead of rank. We aren't some kind of second class tool!"
 end
 
 bot.command [:stats, :stat] do |event, platform, user_id, negated|
   (platform = platform.downcase) if platform
   unless platform == "steam" || platform == "originators" || platform == "pc" || platform == "sites" || platform == "ps4" ||  platform == "xbox" || platform == "help" || platform == "github"|| platform == "dev"
-    "Please dont forget to use Platform(steam/pc/ps4/xbox).\nFor more help please use !help rltracker.pro"
+    return "Please dont forget to specify the platform (steam/pc/ps4/xbox).\nFor more help please use !help rltracker.pro"
   else
     if user_id == nil
       case platform
         when "dev"
-          "Quent#6782 did the concept of the Bot and Yixn#9503 redeveloped it."
+          return "Quent#6782 did the concept of the Bot and Yixn#9503 redeveloped it."
         when "sites"
-          "Featured by http://rltracker.pro partnered with http://prorl.com"
+          return "Featured by http://rltracker.pro, partnered with http://prorl.com"
         when "originators"
-          "Featured by http://rltracker.pro partnered with http://prorl.com"
+          return "Featured by http://rltracker.pro, partnered with http://prorl.com"
         when "help"
-          help
+          return help
         when "github"
-          "https://github.com/rltracker/rl_discord_bot"
+          return "https://github.com/rltracker/rl_discord_bot"
         else
-          "Please include an UserID like:\n!stat steam yixn.\nFor more help please use !help rltracker.pro"
+          return "Please include a UserID like:\n!stat steam yixn.\nFor more help please use !help rltracker.pro"
       end
     else
       case platform
@@ -56,7 +56,7 @@ bot.command [:stats, :stat] do |event, platform, user_id, negated|
           platform = 3
       end
       if user_id == "Harley" || user_id == "Steamierpilot72"
-        "ProspectScrub"
+        return "ProspectScrub"
       else
         if user_id.downcase == "quent"
           user_id = "kuxir97"
@@ -73,21 +73,28 @@ bot.command [:stats, :stat] do |event, platform, user_id, negated|
           image = response["image"]
         end
         if image == nil
+          out = "Cant find Player. Please use your "
           case platform
             when 1
-              "Cant find Player. Please use your vanityurl or steamID64\nIf you are not sure about which id to use, please refer to https://steamid.io.\nFor more help please use !help rltracker.pro"
+              out += "vanityurl or steamID64\nIf you are not sure about which id to use, please refer to https://steamid.io."
             when 2
-              "Cant find Player. Please use your ps4 username.\nFor more help please use !help rltracker.pro"
+              out += "ps4 username."
             when 3
-              "Cant find Player. Please use your xbox username.\nFor more help please use !help rltracker.pro"
+              out += "xbox username."
           end
+          return out + "\nFor more help please use !help rltracker.pro"
         else
           file = open(image)
           File.open("image.png", "w") do |f|
             f.write file.read
           end
           event.channel.send_file File.new("image.png")
-          "More stats: #{response["url"].gsub(" ","%20")}\nTrack your stats and rating live: http://rltracker.pro/live_tracker?player[]=#{response["player"]["id"]}\nAdd me: #{"http://steamcommunity.com/profiles/"+response["player"]["player_id"] if platform == 1}"
+          out = "More stats: #{response["url"].gsub(" ", "%20")}"
+          out += "\nTrack your stats and rating live: http://rltracker.pro/live_tracker?player[]=#{response["player"]["id"]}"
+          if platform == 1
+            out += "\nAdd me: http://steamcommunity.com/profiles/#{response["player"]["player_id"]}"
+          end
+          return out
         end
       end
     end
@@ -95,7 +102,8 @@ bot.command [:stats, :stat] do |event, platform, user_id, negated|
 end
 
 def help
-  "!stats {platform} {user_id} {white}
+  <<-EOF.gsub(/^  /, "")
+  !stats {platform} {user_id} {white}
 
   Platform:
     steam/pc/ps4/xbox
@@ -120,7 +128,7 @@ def help
     !stat dev
     !stat github
     !stat originators
-  "
+  EOF
 end
 
 bot.run
