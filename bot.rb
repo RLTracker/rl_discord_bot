@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 require "discordrb"
 require "open-uri"
+require "cgi"
 
 rltracker_api_key = ENV["RLTRACKER_API_KEY"]
 token = ENV["DISCORD_TOKEN"]
@@ -59,7 +60,7 @@ bot.command [:stats, :stat] do |event, platform, user_id, negated|
         if user_id.downcase == "quent"
           user_id = "kuxir97"
         end
-        url = URI.parse("http://rltracker.pro/api/profile/get?api_key=#{rltracker_api_key}&platform=#{platform}&id=#{user_id}")
+        url = URI.parse("http://rltracker.pro/api/profile/get?api_key=#{CGI.escape(rltracker_api_key)}&platform=#{CGI.escape(platform)}&id=#{CGI.escape(user_id)}")
         req = Net::HTTP::Get.new(url.to_s)
         res = Net::HTTP.start(url.host, url.port) do |http|
           http.request(req)
@@ -88,9 +89,9 @@ bot.command [:stats, :stat] do |event, platform, user_id, negated|
           end
           event.channel.send_file File.new("image.png")
           out = "More stats: #{response["url"].gsub(" ", "%20")}"
-          out += "\nTrack your stats and rating live: http://rltracker.pro/live_tracker?player[]=#{response["player"]["id"]}"
+          out += "\nTrack your stats and rating live: http://rltracker.pro/live_tracker?player[]=#{CGI.escape(response["player"]["id"])}"
           if platform == 1
-            out += "\nAdd me: http://steamcommunity.com/profiles/#{response["player"]["player_id"]}"
+            out += "\nAdd me: https://steamcommunity.com/profiles/#{CGI.escape(response["player"]["player_id"])}"
           end
           return out
         end
