@@ -10,6 +10,21 @@ bot.mention do |event|
   event.user.pm('Stop mentioning me!')
 end
 
+bot.command :hype do |event|
+  puts event.user.id.to_s
+  url = URI.parse("http://rltracker.pro/api/profile/hype?api_key=#{rltracker_api_key}&discord_id=#{event.user.id}")
+  req = Net::HTTP::Get.new(url.to_s)
+  res = Net::HTTP.start(url.host, url.port) {|http|
+    http.request(req)
+  }
+  response = (JSON.parse res.body)
+  if response["status"].to_i == 1
+    response["text"]
+  else
+    "You already !hyped the last hour!"
+  end
+end
+
 bot.command [:help] do |event,key|
   if key && key.downcase == "rltracker.pro"
     help
@@ -38,11 +53,13 @@ def help
     !stats ps4 Mr%20Narwha1
     !stats xbox rafro white
   Other Commands:
-    !stat {platform} {user_id} {white}
-    !stat help == !help rltracker.pro
-    !stat dev
-    !stat github
-    !stat originators
+    !stats {platform} {user_id} {white}
+    !stats help == !help rltracker.pro
+    !stats dev
+    !stats github
+    !stats originators
+
+    !hype
   "
 end
 bot.command [:rank,:ranks] do |event|
